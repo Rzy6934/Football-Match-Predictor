@@ -36,8 +36,16 @@ def format_datetime(datetime):
 
 def format_team_name(team_name):
     parts = team_name.split("-")
-    formatted_parts = [part.upper() if len(part) == 2 else part.capitalize() for part in parts]
+    formatted_parts = [part.upper() if (len(part) == 2 or len(part)) == 3 else part.capitalize() for part in parts]
     return ' '.join(formatted_parts)
+
+
+def insert_full_time_result(game_data_list):
+    for game in game_data_list:
+        if game[5] > game[6]:
+            game.insert(6, "H")
+        else:
+            game.insert(6, "NH")
 
 
 def accept_cookies(driver):
@@ -98,10 +106,12 @@ def get_game_sheet_data(driver, game_id):
 
     td_elements = driver.find_elements(By.CSS_SELECTOR, "td.Opta-Outer")
     offense_stats_list = [element.text for element in td_elements if element.text]
+    for i in range(2, 6):
+        offense_stats_list[i] = int(offense_stats_list[i])
     driver.back()
     driver.back()
 
-    return [date, home_team, away_team, home_ft_goals, away_ft_goals] + offense_stats_list[2:6]
+    return [date, home_team, away_team, int(home_ft_goals), int(away_ft_goals)] + offense_stats_list[2:6]
 
 
 def scrape_ligue1_data():
@@ -145,7 +155,10 @@ def scrape_ligue1_data():
         driver.execute_script("window.scrollTo(0, 0);")
 
     driver.quit()
-    print(games_data_list)
+    insert_full_time_result(games_data_list)
+    return games_data_list
 
 
-scrape_ligue1_data()
+if __name__ == "__main__":
+    games_data_ligue1 = scrape_ligue1_data()
+    print(games_data_ligue1)
