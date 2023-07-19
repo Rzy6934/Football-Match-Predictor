@@ -199,7 +199,7 @@ if __name__ == "__main__":
         selectable_months = get_selectable_months(driver)
         print(selectable_months)
         time.sleep(1)
-        for month in selectable_months[2:4]:
+        for month in selectable_months[4:5]:
             select_month(driver, month)
             time.sleep(1)
             month_games = get_month_games(driver)
@@ -230,11 +230,11 @@ if __name__ == "__main__":
             month_games = []
                 
     add_full_time_results(all_games_data)
-    add_matchday(all_games_data, 239)
+    add_matchday(all_games_data, 332)
 
     json_data = json.dumps(all_games_data)
 
-    with open("data/2022-2023/Mar_Apr_2023_data.json", "w") as json_file:
+    with open("data/2022-2023/May_2023_data.json", "w") as json_file:
         json_file.write(json_data)
 
     time.sleep(60)
