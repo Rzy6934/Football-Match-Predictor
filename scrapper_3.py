@@ -18,9 +18,9 @@ def accept_cookies(driver):
 
     agree_cookies_btn.click()
 
-def select_championship(driver):
+def select_championship(driver, championship):
     championship_link = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.LINK_TEXT, "Premier League"))
+        EC.element_to_be_clickable((By.LINK_TEXT, championship))
     )
 
     championship_link.click()
@@ -182,15 +182,15 @@ if __name__ == "__main__":
     driver.maximize_window()
     driver.get(whoscored_url)
     accept_cookies(driver)
-    time.sleep(1)
-    select_championship(driver)
-    time.sleep(1)
+    # time.sleep(1)
+    select_championship(driver, "Serie A")
+    # time.sleep(1)
     select_season(driver, "2022/2023")
-    time.sleep(1)
+    # time.sleep(1)
     select_fixtures(driver)
-    time.sleep(1)
+    # time.sleep(1)
     select_date_config(driver)
-    time.sleep(1)
+    # time.sleep(1)
     selectable_years = get_selectable_years(driver)
     time.sleep(1)
     for year in selectable_years[1:2]:
@@ -199,7 +199,7 @@ if __name__ == "__main__":
         selectable_months = get_selectable_months(driver)
         print(selectable_months)
         time.sleep(1)
-        for month in selectable_months[4:5]:
+        for month in selectable_months[3:6]:
             select_month(driver, month)
             time.sleep(1)
             month_games = get_month_games(driver)
@@ -222,19 +222,19 @@ if __name__ == "__main__":
                 game_data += game_goals
                 game_data += game_stats
                 all_games_data.append(game_data)
-                time.sleep(1)
+                # time.sleep(1)
                 driver.close()
-                time.sleep(1)
+                # time.sleep(1)
                 driver.switch_to.window(driver.window_handles[0])
 
             month_games = []
                 
     add_full_time_results(all_games_data)
-    add_matchday(all_games_data, 332)
+    add_matchday(all_games_data, 270)
 
     json_data = json.dumps(all_games_data)
 
-    with open("data/2022-2023/May_2023_data.json", "w") as json_file:
+    with open("data/Serie A/2022-2023/Apr_May_Jun_2023.json", "w") as json_file:
         json_file.write(json_data)
 
     time.sleep(60)
