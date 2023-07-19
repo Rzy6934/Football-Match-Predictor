@@ -9,7 +9,6 @@ from selenium.webdriver.support.ui import Select
 
 whoscored_url = "https://www.whoscored.com/"
 all_games_data = []
-global cpt
 
 
 def accept_cookies(driver):
@@ -200,7 +199,7 @@ if __name__ == "__main__":
         selectable_months = get_selectable_months(driver)
         print(selectable_months)
         time.sleep(1)
-        for month in selectable_months[3:4]:
+        for month in selectable_months[4:5]:
             select_month(driver, month)
             time.sleep(1)
             month_games = get_month_games(driver)
@@ -231,12 +230,11 @@ if __name__ == "__main__":
             month_games = []
                 
     add_full_time_results(all_games_data)
-    add_matchday(all_games_data, 288)
+    add_matchday(all_games_data, 338)
 
     json_data = json.dumps(all_games_data)
 
-    with open("Apr_2022_data.json", "w") as json_file:
+    with open("data/May_2022_data.json", "w") as json_file:
         json_file.write(json_data)
 
-    # print(all_games_data)
     time.sleep(60)
