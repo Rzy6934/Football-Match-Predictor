@@ -1,5 +1,6 @@
 import time
 import json
+import configparser
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -8,9 +9,17 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 
 
+config = configparser.ConfigParser()
+
 whoscored_url = "https://www.whoscored.com/"
 all_games_data = []
-
+config_championships_dico = {
+    "Premier League": "config_EN.ini", 
+    "LaLiga": "config_ES.ini", 
+    "Serie A": "config_IT.ini", 
+    "Bundesliga": "config_DE.ini", 
+    "Ligue 1": "config_FR.ini"
+}
 
 def accept_cookies(driver):
     try:
@@ -247,14 +256,16 @@ def transform_season_format(season):
 if __name__ == "__main__":
     try:
         championship_input = input("Championship : ")
-        season_input = input("Season : ")
+        config.read(config_championships_dico[championship_input])
+        season_input = config["Parameters"]["Season"]
         season_formatted = transform_season_format(season_input)
         year_input = input("Year : ")
         year_index = get_year_index(season_input, year_input)
         month_index = int(input("Month : "))
         months_range = int(input("Months range : "))
         json_file_name = input("Json File Name : ")
-        counter_input = int(input("Counter : "))
+        counter = int(config["Parameters"]["Counter"])
+        print(counter)
 
         driver = webdriver.Chrome()
         driver.maximize_window()
@@ -295,7 +306,12 @@ if __name__ == "__main__":
                 month_games = []
                     
         add_full_time_results(all_games_data)
-        add_matchday(all_games_data, counter_input)
+        add_matchday(all_games_data, counter)
+
+        config.set("Parameters", "Counter", str(len(all_games_data) + counter))
+
+        with open(config_championships_dico[championship_input], 'w') as configfile:
+            config.write(configfile)
 
         json_data = json.dumps(all_games_data)
 
