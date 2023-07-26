@@ -255,14 +255,41 @@ def transform_season_format(season):
 
 if __name__ == "__main__":
     try:
-        championship_input = input("Championship : ")
+        while True:
+            championship_input = input("Championship : ")
+            if championship_input in list(config_championships_dico.keys()):
+                break
+            else:
+                print("Invalid championship. Please enter a valid championship.")
+        
         config.read(f"configs/{config_championships_dico[championship_input]}")
         season_input = config["Parameters"]["Season"]
         season_formatted = transform_season_format(season_input)
-        year_input = input("Year : ")
+        
+        valid_years = season_input.split("/")
+        while True:
+            year_input = input(f"Year {valid_years[0]} or {valid_years[1]}: ")
+            if year_input in valid_years:
+                break
+            else:
+                print("Invalid year. Please enter a valid year.")
+
         year_index = get_year_index(season_input, year_input)
-        month_index = int(input("Month : "))
-        months_range = int(input("Months range : "))
+
+        while True:
+            month_index = int(input("Month : "))
+            if  0 <= month_index <= 5:
+                break
+            else:
+                print("Invalid month index. Please enter a number between 0 and 5.")
+        
+        while True:
+            months_range = int(input("Months range : "))
+            if 1 <= months_range <= 6:
+                break
+            else:
+                print("Invalid months range. Please enter a number between 1 and 6.")
+        
         json_file_name = input("Json File Name : ")
         counter = int(config["Parameters"]["Counter"])
         print(counter)
