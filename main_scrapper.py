@@ -256,7 +256,7 @@ def transform_season_format(season):
 if __name__ == "__main__":
     try:
         championship_input = input("Championship : ")
-        config.read(config_championships_dico[championship_input])
+        config.read(f"configs/{config_championships_dico[championship_input]}")
         season_input = config["Parameters"]["Season"]
         season_formatted = transform_season_format(season_input)
         year_input = input("Year : ")
@@ -310,7 +310,7 @@ if __name__ == "__main__":
 
         config.set("Parameters", "Counter", str(len(all_games_data) + counter))
 
-        with open(config_championships_dico[championship_input], 'w') as configfile:
+        with open(f"configs/{config_championships_dico[championship_input]}", 'w') as configfile:
             config.write(configfile)
 
         json_data = json.dumps(all_games_data)
