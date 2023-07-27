@@ -230,19 +230,6 @@ def get_stats(driver):
     finally:
         return game_stats
 
-def add_full_time_results(all_games_data):
-    for game_data in all_games_data:
-        if game_data[5] > game_data[6]:
-            game_data.insert(7, "H")
-        else:
-            game_data.insert(7, "NH")
-
-def add_matchday(all_games_data, counter_starting_value):
-    counter = counter_starting_value
-    for game_data in all_games_data:
-        game_data.insert(1, (counter//10)+1)
-        counter += 1
-
 def get_year_index(season, year):
     parts = season.split("/")
     if year in parts:
@@ -291,8 +278,6 @@ if __name__ == "__main__":
                 print("Invalid months range. Please enter a number between 1 and 6.")
         
         json_file_name = input("Json File Name : ")
-        counter = int(config["Parameters"]["Counter"])
-        print(counter)
 
         driver = webdriver.Chrome()
         driver.maximize_window()
@@ -331,11 +316,6 @@ if __name__ == "__main__":
                     driver.switch_to.window(driver.window_handles[0])
 
                 month_games = []
-                    
-        add_full_time_results(all_games_data)
-        add_matchday(all_games_data, counter)
-
-        config.set("Parameters", "Counter", str(len(all_games_data) + counter))
 
         with open(f"configs/{config_championships_dico[championship_input]}", 'w') as configfile:
             config.write(configfile)
