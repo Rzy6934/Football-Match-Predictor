@@ -192,16 +192,16 @@ def get_goals(driver):
 
 def get_stats(driver):
     try:
-        home_team_shots_element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//li[@data-for="shotsTotal"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]'))
-        )
-        away_team_shots_element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//li[@data-for="shotsTotal"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'))
-        )
         shot_stats_element = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, '//li[@data-for="shotsTotal"]//div[@class="toggle-stat-details iconize iconize-icon-right ui-state-transparent-default"]'))
         )
         shot_stats_element.click()
+        home_team_total_shots_element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, '//li[@data-for="shotsTotal"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]'))
+        )
+        away_team_total_shots_element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, '//li[@data-for="shotsTotal"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'))
+        )
         home_team_target_shots_element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, '//li[@data-for="shotsOnTarget"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]'))
         )
@@ -220,8 +220,20 @@ def get_stats(driver):
         away_team_pass_success_element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, '//li[@data-for="passSuccess"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'))
         )
+        home_team_dribbles_won_element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, '//li[@data-for="dribblesWon"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]'))
+        )
+        away_team_dribbles_won_element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, '//li[@data-for="dribblesWon"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'))
+        )
+        home_team_dribbles_success_element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, '//li[@data-for="dribbleSuccess"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]'))
+        )
+        away_team_dribbles_success_element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, '//li[@data-for="dribbleSuccess"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'))
+        )
 
-        game_stats = [int(home_team_shots_element.text), int(away_team_shots_element.text), int(home_team_target_shots_element.text), int(away_team_target_shots_element.text),
+        game_stats = [int(home_team_total_shots_element.text), int(away_team_total_shots_element.text), int(home_team_target_shots_element.text), int(away_team_target_shots_element.text),
                     float(home_team_possession_element.text), float(away_team_possession_element.text), float(home_team_pass_success_element.text), float(away_team_pass_success_element.text)]
 
     except Exception:
