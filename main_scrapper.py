@@ -20,6 +20,112 @@ config_championships_dico = {
     "Bundesliga": "config_DE.ini", 
     "Ligue 1": "config_FR.ini"
 }
+xpath_stats_elements = {
+    "not_clickable_elements":{
+        "possession": {
+            "home": '//li[@data-for="possession"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+            "away": '//li[@data-for="possession"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+        },
+        "cornersTotal": {
+            "home": '//li[@data-for="cornersTotal"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+            "away": '//li[@data-for="cornersTotal"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+        }
+    },
+    "clickable_elements": {
+        "shotsTotal": {
+            "shotsTotal": {
+                "home": '//li[@data-for="shotsTotal"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="shotsTotal"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            },
+            "shotsOnTarget": {
+                "home": '//li[@data-for="shotsOnTarget"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="shotsOnTarget"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            },
+            "shotsOffTarget": {
+                "home": '//li[@data-for="shotsOffTarget"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="shotsOffTarget"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            },
+            "shotsBlocked": {
+                "home": '//li[@data-for="shotsBlocked"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="shotsBlocked"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            }
+        },
+        "passSuccess": {
+            "passesTotal": {
+                "home": '//li[@data-for="passesTotal"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="passesTotal"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            },
+            "passSuccess": {
+                "home": '//li[@data-for="passSuccess"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="passSuccess"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            },
+            "passesKey": {
+                "home": '//li[@data-for="passesKey"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="passesKey"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            }
+        },
+        "dribblesWon": {
+            "dribblesAttempted": {
+                "home": '//li[@data-for="dribblesAttempted"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="dribblesAttempted"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            },
+            "dribblesWon": {
+                "home": '//li[@data-for="dribblesWon"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="dribblesWon"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            },
+            "dribbleSuccess": {
+                "home": '//li[@data-for="dribbleSuccess"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="dribbleSuccess"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            }
+        },
+        "aerialsWon": {
+            "aerialsWon": {
+                "home": '//li[@data-for="aerialsWon"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="aerialsWon"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            },
+            "aerialSuccess": {
+                "home": '//li[@data-for="aerialSuccess"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="aerialSuccess"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            },
+            "defensiveAerials": {
+                "home": '//li[@data-for="defensiveAerials"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="defensiveAerials"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            },
+            "offensiveAerials": {
+                "home": '//li[@data-for="offensiveAerials"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="offensiveAerials"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            }
+        },
+        "tackleSuccessful": {
+            "tacklesTotal": {
+                "home": '//li[@data-for="tacklesTotal"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="tacklesTotal"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            },
+            "tackleSuccessful": {
+                "home": '//li[@data-for="tackleSuccessful"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="tackleSuccessful"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            },
+            "tackleSuccess": {
+                "home": '//li[@data-for="tackleSuccess"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="tackleSuccess"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            },
+            "interceptions": {
+                "home": '//li[@data-for="interceptions"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="interceptions"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            }
+        },
+        "dispossessed": {
+            "foulsCommited": {
+                "home": '//li[@data-for="foulsCommited"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="foulsCommited"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            },
+            "offsidesCaught": {
+                "home": '//li[@data-for="offsidesCaught"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]',
+                "away": '//li[@data-for="offsidesCaught"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'
+            }
+        }
+    }
+}
 
 def accept_cookies(driver):
     try:
@@ -28,8 +134,8 @@ def accept_cookies(driver):
         )
         agree_cookies_btn.click()
     
-    except Exception:
-        print("Failed to accept cookies")
+    except Exception as e:
+        print("Failed to accept cookies : ", e)
 
 def select_championship(driver, championship):
     try:
@@ -38,8 +144,8 @@ def select_championship(driver, championship):
         )
         championship_link.click()
     
-    except Exception:
-        print("Failed to select the champiionship")
+    except Exception as e:
+        print("Failed to select the champiionship : ", e)
 
 def select_season(driver, season):
     try:
@@ -53,8 +159,8 @@ def select_season(driver, season):
                 select_season.select_by_value(option.get_attribute("value"))
                 break
 
-    except Exception:
-        print("Failed to select the season")
+    except Exception as e:
+        print("Failed to select the season : ", e)
 
 def select_fixtures(driver):
     try:
@@ -63,8 +169,8 @@ def select_fixtures(driver):
         )
         fixtures_link.click()
 
-    except Exception:
-        print("Failed to select the fixtures")
+    except Exception as e:
+        print("Failed to select the fixtures : ", e)
 
 def select_date_config(driver):
     try:
@@ -73,8 +179,8 @@ def select_date_config(driver):
         )
         date_config_link.click()
     
-    except Exception:
-        print("Failed to select the date configuration")
+    except Exception as e:
+        print("Failed to select the date configuration : ", e)
 
 def select_year(driver, year):
     try:
@@ -83,8 +189,8 @@ def select_year(driver, year):
         )
         year_element.click()
     
-    except Exception:
-        print("Failed to select the year")
+    except Exception as e:
+        print("Failed to select the year : ", e)
 
 def select_month(driver, month):
     try:
@@ -94,7 +200,7 @@ def select_month(driver, month):
         month_element.click()
 
     except Exception:
-        print("Failed to select the month")
+        print("Failed to select the month : ", e)
 
 def get_selectable_years(driver):
     try:
@@ -105,8 +211,8 @@ def get_selectable_years(driver):
             year = year_element.text
             years.append(year)
     
-    except Exception:
-        print("Failed to get the selectable years")
+    except Exception as e:
+        print("Failed to get the selectable years : ", e)
 
     finally:
         return years
@@ -120,8 +226,8 @@ def get_selectable_months(driver):
             month = month_element.get_attribute("data-value").strip()
             months.append(month)
 
-    except Exception:
-        print("Failed to get the selectable months")
+    except Exception as e:
+        print("Failed to get the selectable months : ", e)
 
     finally:
         return months
@@ -134,8 +240,8 @@ def get_month_games_url(driver):
 
         game_urls = [link.get_attribute("href") for link in game_div_elements]
     
-    except Exception:
-        print("Failed to get the urls")
+    except Exception as e:
+        print("Failed to get the urls : ", e)
 
 
     finally:
@@ -149,8 +255,8 @@ def get_team_names(driver):
 
         home_team, away_team = team_names[0].text, team_names[1].text
 
-    except Exception:
-        print("Failed to get the teams names")
+    except Exception as e:
+        print("Failed to get the teams names : ", e)
     
     finally:
         return home_team, away_team
@@ -164,8 +270,8 @@ def get_game_date(driver):
         game_date_obj = datetime.strptime(game_date_element.text, "%a, %d-%b-%y")
         formatted_game_date = game_date_obj.strftime("%d/%m/%Y")
 
-    except Exception:
-        print("Failed to get the game date")
+    except Exception as e:
+        print("Failed to get the game date : ", e)
 
     finally:
         return formatted_game_date
@@ -184,60 +290,51 @@ def get_goals(driver):
 
         game_goals = [int(home_team_half_time_goals), int(away_team_half_time_goals), int(home_team_full_time_goals), int(away_team_full_time_goals)]
 
-    except Exception:
-        print("Failed to get game goals")
+    except Exception as e:
+        print("Failed to get game goals : ", e)
 
     finally:
         return game_goals
 
 def get_stats(driver):
     try:
-        shot_stats_element = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '//li[@data-for="shotsTotal"]//div[@class="toggle-stat-details iconize iconize-icon-right ui-state-transparent-default"]'))
-        )
-        shot_stats_element.click()
-        home_team_total_shots_element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//li[@data-for="shotsTotal"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]'))
-        )
-        away_team_total_shots_element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//li[@data-for="shotsTotal"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'))
-        )
-        home_team_target_shots_element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//li[@data-for="shotsOnTarget"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]'))
-        )
-        away_team_target_shots_element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//li[@data-for="shotsOnTarget"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'))
-        )
-        home_team_possession_element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//li[@data-for="possession"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]'))
-        )
-        away_team_possession_element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//li[@data-for="possession"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'))
-        )
-        home_team_pass_success_element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//li[@data-for="passSuccess"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]'))
-        )
-        away_team_pass_success_element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//li[@data-for="passSuccess"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'))
-        )
-        home_team_dribbles_won_element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//li[@data-for="dribblesWon"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]'))
-        )
-        away_team_dribbles_won_element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//li[@data-for="dribblesWon"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'))
-        )
-        home_team_dribbles_success_element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//li[@data-for="dribbleSuccess"]//div[@class="match-centre-stat-values"]//span[@data-field="home"]'))
-        )
-        away_team_dribbles_success_element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//li[@data-for="dribbleSuccess"]//div[@class="match-centre-stat-values"]//span[@data-field="away"]'))
-        )
+        game_stats = []
 
-        game_stats = [int(home_team_total_shots_element.text), int(away_team_total_shots_element.text), int(home_team_target_shots_element.text), int(away_team_target_shots_element.text),
-                    float(home_team_possession_element.text), float(away_team_possession_element.text), float(home_team_pass_success_element.text), float(away_team_pass_success_element.text)]
+        for category, sub_dico in xpath_stats_elements.items():
+            if category == "not_clickable_elements":
+                for sub_key, stats_dico in sub_dico.items():
+                    for stat_key, value in stats_dico.items():
+                        print(value)
+                        print(type(value))
+                        stat_element = WebDriverWait(driver, 10).until(
+                            EC.presence_of_element_located((By.XPATH, value))
+                        )
+                        print(sub_key)
+                        if sub_key == "possession":
+                            game_stats.append(float(stat_element.text))
+                        else:
+                            game_stats.append(int(stat_element.text))
 
-    except Exception:
-        print("Failed to get game stats")
+            else:
+                for sub_key_2, stats_dico_2 in sub_dico.items():
+                    main_stat_element = WebDriverWait(driver, 10).until(
+                        EC.element_to_be_clickable((By.XPATH, f'//li[@data-for={sub_key_2}]//div[@class="toggle-stat-details iconize iconize-icon-right ui-state-transparent-default"]'))
+                    )
+                    print("Main stat element text:", main_stat_element.text)
+
+                    main_stat_element.click()
+                    for stat_key_2, value_2 in stats_dico_2.items():
+                        stat_element_2 = WebDriverWait(driver, 10).until(
+                            EC.presence_of_element_located((By.XPATH, value_2))
+                        )
+                        if "Success" in sub_key_2 and "Successful" not in sub_key_2:
+                            game_stats.append(float(stat_element_2.text))
+                        else:
+                            game_stats.append(int(stat_element_2.text))
+
+    except Exception as e:
+        print("Failed to get game stats : ", e)
+        game_stats = []
 
     finally:
         return game_stats
