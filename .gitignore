@@ -1,2 +1,6 @@
 /foot_env/
-/data
+/data/
+/configs/
+scrapper_ligue_1_v1.py
+scrapper_ligue_1_v2.py
+test_scrapper.py
