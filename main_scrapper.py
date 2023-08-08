@@ -139,13 +139,23 @@ def accept_cookies(driver):
 
 def close_add_window(driver):
     try:
-        close_add_window_btn = WebDriverWait(driver, 10).until(
+        add_window_btn = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, '//div[@style="float: right;"]/svg'))
         )
-        close_add_window_btn.click()
+        add_window_btn.click()
     
     except Exception as e:
         print(f"Failed to close add window : {e}")
+
+def close_webpush_window(driver):
+    try:
+        webpush_btn = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '//button[@class="webpush-swal2-close"]'))
+        )
+        webpush_btn.click()
+    
+    except Exception as e:
+        print(f"Failed to close webpush window : {e}")
 
 def scroll_to_stats(driver):
     try:
@@ -424,6 +434,7 @@ if __name__ == "__main__":
         driver.maximize_window()
         driver.get(whoscored_url)
         accept_cookies(driver)
+        close_webpush_window(driver)
         select_championship(driver, championship_input)
         select_season(driver, season_input)
         select_fixtures(driver)
@@ -436,7 +447,7 @@ if __name__ == "__main__":
                 select_month(driver, month)
                 time.sleep(1)
                 month_games = get_month_games_url(driver)
-                for url in month_games[0:1]:
+                for url in month_games:
                     driver.execute_script("window.open('');")
                     driver.switch_to.window(driver.window_handles[1])
                     driver.get(url)
