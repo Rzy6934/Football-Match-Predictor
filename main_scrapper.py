@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
+from selenium.common.exceptions import NoSuchElementException
 
 
 config = configparser.ConfigParser()
@@ -285,6 +286,7 @@ def get_team_names(driver):
         )
 
         home_team, away_team = team_names[0].text, team_names[1].text
+        # print(home_team, away_team)
 
     except Exception as e:
         print(f"Failed to get the teams names : {e}")
@@ -309,17 +311,28 @@ def get_game_date(driver):
 
 def get_goals(driver):
     try:
-        half_time_score_element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//dt[text()="Half time:"]/following-sibling::dd[1]'))
-        )
+        try:
+            half_time_score_element = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//dt[text()="Half time:"]/following-sibling::dd[1]'))
+            )
+            home_team_half_time_goals, away_team_half_time_goals = half_time_score_element.text.split(":")
+
+        except NoSuchElementException:
+            home_team_half_time_goals = away_team_half_time_goals = "ND"
+        
         full_time_score_element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, '//dt[text()="Full time:"]/following-sibling::dd[1]'))
         )
-
-        home_team_half_time_goals, away_team_half_time_goals = half_time_score_element.text.split(":")
         home_team_full_time_goals, away_team_full_time_goals = full_time_score_element.text.split(":")
 
-        game_goals = [int(home_team_half_time_goals), int(away_team_half_time_goals), int(home_team_full_time_goals), int(away_team_full_time_goals)]
+        # print(half_time_score_element.text.split(":"))
+        # print(full_time_score_element.text.split(":"))
+        
+        if home_team_half_time_goals == away_team_half_time_goals == "ND":
+            game_goals = [home_team_half_time_goals, away_team_half_time_goals, int(home_team_full_time_goals), int(away_team_full_time_goals)]
+
+        else:
+            game_goals = [int(home_team_half_time_goals), int(away_team_half_time_goals), int(home_team_full_time_goals), int(away_team_full_time_goals)]
 
     except Exception as e:
         print(f"Failed to get game goals : {e}")
