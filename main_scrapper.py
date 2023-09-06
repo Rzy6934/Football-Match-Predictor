@@ -8,9 +8,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.service import Service as ChromeService
 
 
 config = configparser.ConfigParser()
+
+CHROMEDRIVER_PATH = "C:\Program Files (x86)\chromedriver.exe"
+
+options = webdriver.ChromeOptions()
+service = ChromeService(executable_path=CHROMEDRIVER_PATH)
 
 whoscored_url = "https://www.whoscored.com/"
 all_games_data = []
@@ -443,7 +449,7 @@ if __name__ == "__main__":
         
         json_file_name = input("Json File Name : ")
 
-        driver = webdriver.Chrome()
+        driver = webdriver.Chrome(service=service, options=options)
         driver.maximize_window()
         driver.get(whoscored_url)
         accept_cookies(driver)
