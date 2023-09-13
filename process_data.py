@@ -4,10 +4,7 @@ championships = ["Bundesliga", "LaLiga", "Ligue 1", "Premier League", "Serie A"]
 seasons = ["2021-2022", "2022-2023"]
 nb_week_games = 0
 teams = []
-
-all_data_dict = {}
-teams_agg_goals_dict = {}
-keys = ["Date", "HT", "AT", "HTHG", "ATHG", "HTFG", "ATFG", "HTPoss", "ATPoss", "HTC", "ATC", "HTTS", "ATTS", "HTSOnT", "ATSOnT", "HTSOffT", "ATSOffT", "HTSB", "ATSB", "HTTP", "ATTP", "HTPS", "ATPS", "HTKP", "ATKP", "HTDA", "ATDA", "HTDW", "ATDW", "HTDS", "ATDS", "HTAW", "ATAW", "HTAS", "ATAS", "HTDA", "ATDA", "HTOA", "ATOA", "HTTT", "ATTT", "HTTS", "ATTS", "HTTSucc", "ATTSucc", "HTI", "ATI", "HTFC", "ATFC", "HTOC", "ATOC"]
+# keys = ["Date", "HT", "AT", "HTHG", "ATHG", "HTFG", "ATFG", "HTPoss", "ATPoss", "HTC", "ATC", "HTTS", "ATTS", "HTSOnT", "ATSOnT", "HTSOffT", "ATSOffT", "HTSB", "ATSB", "HTTP", "ATTP", "HTPS", "ATPS", "HTKP", "ATKP", "HTDA", "ATDA", "HTDW", "ATDW", "HTDS", "ATDS", "HTAW", "ATAW", "HTAS", "ATAS", "HTDA", "ATDA", "HTOA", "ATOA", "HTTT", "ATTT", "HTTS", "ATTS", "HTTSucc", "ATTSucc", "HTI", "ATI", "HTFC", "ATFC", "HTOC", "ATOC"]
 counter = 0
 
 def transform_season_format(season):
@@ -19,18 +16,12 @@ def get_teams(all_games_data, nb_week_games):
         teams.append(game_data[1])
         teams.append(game_data[2])
 
-# def add_full_time_results(all_games_data):
-#     for game_data in all_games_data:
-#         if game_data[5] > game_data[6]:
-#             game_data.insert(7, "H")
-#         else:
-#             game_data.insert(7, "NH")
+def add_default_stats(all_games_data):
+    zeros_list = [0, 0, 0, 0, 0, 0, 0, 0]
+    for game_data in all_games_data:
+        game_data += zeros_list
 
-# def add_matchday(all_games_data, nb_week_games):
-#     counter = 0
-#     for game_data in all_games_data:
-#         game_data.insert(1, (counter//nb_week_games)+1)
-#         counter += 1
+    return all_games_data
 
 def get_agg_goals(all_games_data):
     all_teams_agg_goals_scored = []
@@ -63,16 +54,70 @@ def get_agg_goals(all_games_data):
 
     return all_teams_agg_goals_scored, all_teams_agg_goals_conceded
 
-def generate_team_stats_dict(teams, all_teams_agg_goals_scored, all_teams_agg_goals_conceded):
-    team_stats_dict = {}
+def get_agg_points(all_games_data):
+    all_teams_agg_points = []
+    team_agg_points = []
+    agg_points = 0
+    for team in teams:
+        for game_data in all_games_data[1:]:
+            if team in game_data[1]:
+                if game_data[5] > game_data[6]:
+                    agg_points += 3
+                elif game_data[5] == game_data[6]:
+                    agg_points += 1
+                else:
+                    agg_points += 0
 
-    for i, team in enumerate(teams):
-        team_stats_dict[team] = {
-            "scored": all_teams_agg_goals_scored[i],
-            "conceded": all_teams_agg_goals_conceded[i]
-        }
+                team_agg_points.append(agg_points)
 
-    return team_stats_dict
+            elif team in game_data[2]:
+                if game_data[6] > game_data[5]:
+                    agg_points += 3
+                elif game_data[6] == game_data[5]:
+                    agg_points += 1
+                else:
+                    agg_points += 0
+
+                team_agg_points.append(agg_points)
+        team_agg_points.insert(0, 0)
+        all_teams_agg_points.append(team_agg_points)
+        team_agg_points = []
+        agg_points = 0
+
+    return all_teams_agg_points
+
+def add_agg_stats(all_games_data, all_teams_agg_goals_scored, all_teams_agg_goals_conceded, all_teams_agg_points, teams):
+    counter = 0
+    for team, agg_goals_scored, agg_goals_conceded, agg_points in zip(teams, all_teams_agg_goals_scored, all_teams_agg_goals_conceded, all_teams_agg_points):
+        for game_data in all_games_data:
+            if team in game_data[1]:
+                game_data[51] = agg_goals_scored[counter]
+                game_data[53] = agg_goals_conceded[counter]
+                game_data[55] = agg_points[counter]
+                game_data[57] = agg_goals_scored[counter] - agg_goals_conceded[counter]
+                counter += 1
+            elif team in game_data[2]:
+                game_data[52] = agg_goals_scored[counter]
+                game_data[54] = agg_goals_conceded[counter]
+                game_data[56] = agg_points[counter]
+                game_data[58] = agg_goals_scored[counter] - agg_goals_conceded[counter]
+                counter += 1
+        counter = 0
+
+    return all_games_data
+
+# def add_full_time_results(all_games_data):
+#     for game_data in all_games_data:
+#         if game_data[5] > game_data[6]:
+#             game_data.insert(7, "H")
+#         else:
+#             game_data.insert(7, "NH")
+
+# def add_matchday(all_games_data, nb_week_games):
+#     counter = 0
+#     for game_data in all_games_data:
+#         game_data.insert(1, (counter//nb_week_games)+1)
+#         counter += 1
 
 
 if __name__ == "__main__":
@@ -111,22 +156,13 @@ if __name__ == "__main__":
     get_teams(all_games_data, nb_week_games)
 
     all_teams_agg_goals_scored, all_teams_agg_goals_conceded = get_agg_goals(all_games_data)
+    
+    all_teams_agg_points = get_agg_points(all_games_data)
 
-    print(teams)
+    all_games_data_updated = add_default_stats(all_games_data)
 
-    for i, data in enumerate(all_games_data, start=1):
-        data_dict = dict(zip(keys, data))
-        
-        # Initialisez les clés "HTAGS", "ATAGS", "HTAGC", "ATAGC" à None
-        data_dict["HTAGS"] = None
-        data_dict["ATAGS"] = None
-        data_dict["HTAGC"] = None
-        data_dict["ATAGC"] = None
-        
-        # Ajoutez le sous-dictionnaire au dictionnaire principal avec une clé numérique
-        all_data_dict[str(i)] = data_dict
+    all_games_data_updated_2 = add_agg_stats(all_games_data_updated, all_teams_agg_goals_scored, all_teams_agg_goals_conceded, all_teams_agg_points, teams)
 
-    teams_agg_goals_dict = generate_team_stats_dict(teams, all_teams_agg_goals_scored, all_teams_agg_goals_conceded)
+    print(all_games_data_updated_2[304])
 
-# print(all_data_dict)
-print(teams_agg_goals_dict)
+    
