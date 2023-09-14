@@ -4,7 +4,6 @@ championships = ["Bundesliga", "LaLiga", "Ligue 1", "Premier League", "Serie A"]
 seasons = ["2021-2022", "2022-2023"]
 nb_week_games = 0
 teams = []
-# keys = ["Date", "HT", "AT", "HTHG", "ATHG", "HTFG", "ATFG", "HTPoss", "ATPoss", "HTC", "ATC", "HTTS", "ATTS", "HTSOnT", "ATSOnT", "HTSOffT", "ATSOffT", "HTSB", "ATSB", "HTTP", "ATTP", "HTPS", "ATPS", "HTKP", "ATKP", "HTDA", "ATDA", "HTDW", "ATDW", "HTDS", "ATDS", "HTAW", "ATAW", "HTAS", "ATAS", "HTDA", "ATDA", "HTOA", "ATOA", "HTTT", "ATTT", "HTTS", "ATTS", "HTTSucc", "ATTSucc", "HTI", "ATI", "HTFC", "ATFC", "HTOC", "ATOC"]
 counter = 0
 
 def transform_season_format(season):
@@ -56,27 +55,36 @@ def get_agg_goals(all_games_data):
 
 def get_agg_points(all_games_data):
     all_teams_agg_points = []
+    all_teams_wins_losses = []
     team_agg_points = []
+    team_wins_losses = []
     agg_points = 0
+
     for team in teams:
         for game_data in all_games_data[1:]:
             if team in game_data[1]:
                 if game_data[5] > game_data[6]:
                     agg_points += 3
+                    team_wins_losses.append("W")
                 elif game_data[5] == game_data[6]:
                     agg_points += 1
+                    team_wins_losses.append("D")
                 else:
                     agg_points += 0
+                    team_wins_losses.append("L")
 
                 team_agg_points.append(agg_points)
 
             elif team in game_data[2]:
                 if game_data[6] > game_data[5]:
                     agg_points += 3
+                    team_wins_losses.append("W")
                 elif game_data[6] == game_data[5]:
                     agg_points += 1
+                    team_wins_losses.append("D")
                 else:
                     agg_points += 0
+                    team_wins_losses.append("L")
 
                 team_agg_points.append(agg_points)
         team_agg_points.insert(0, 0)
@@ -85,6 +93,52 @@ def get_agg_points(all_games_data):
         agg_points = 0
 
     return all_teams_agg_points
+
+def get_win_losses(all_games_data):
+    all_teams_wins_losses = []
+    team_wins_losses = []
+
+    for team in teams:
+        for game_data in all_games_data:
+            if team in game_data[1]:
+                if game_data[5] > game_data[6]:
+                    team_wins_losses.append("W")
+                elif game_data[5] == game_data[6]:
+                    team_wins_losses.append("D")
+                else:
+                    team_wins_losses.append("L")
+
+            elif team in game_data[2]:
+                if game_data[6] > game_data[5]:
+                    team_wins_losses.append("W")
+                elif game_data[6] == game_data[5]:
+                    team_wins_losses.append("D")
+                else:
+                    team_wins_losses.append("L")
+
+        all_teams_wins_losses.append(team_wins_losses)
+        team_wins_losses = []
+
+    return all_teams_wins_losses
+
+def get_5g_streak(all_teams_wins_losses):
+    all_teams_5g_streaks = []
+    team_5g_streaks = []
+    for team_wins_losses in all_teams_wins_losses:
+        for i in range(len(team_wins_losses)):
+            if i < 5:
+                streak = ["-"] * (5 - i) + team_wins_losses[:i]
+            else:
+                streak = team_wins_losses[i-5:i]
+            team_5g_streaks.append(streak)
+
+        concatenated_streaks = [''.join(sublist) for sublist in team_5g_streaks]
+
+        all_teams_5g_streaks.append(concatenated_streaks)
+        team_5g_streaks = []
+        concatenated_streaks = []
+
+    return all_teams_5g_streaks
 
 def add_agg_stats(all_games_data, all_teams_agg_goals_scored, all_teams_agg_goals_conceded, all_teams_agg_points, teams):
     counter = 0
@@ -155,6 +209,10 @@ if __name__ == "__main__":
 
     get_teams(all_games_data, nb_week_games)
 
+    all_teams_wins_losses = get_win_losses(all_games_data)
+
+    all_teams_5g_streak = get_5g_streak(all_teams_wins_losses)
+
     all_teams_agg_goals_scored, all_teams_agg_goals_conceded = get_agg_goals(all_games_data)
     
     all_teams_agg_points = get_agg_points(all_games_data)
@@ -163,6 +221,8 @@ if __name__ == "__main__":
 
     all_games_data_updated_2 = add_agg_stats(all_games_data_updated, all_teams_agg_goals_scored, all_teams_agg_goals_conceded, all_teams_agg_points, teams)
 
-    print(all_games_data_updated_2[304])
+    # print(all_games_data_updated_2[304])
+    print(all_teams_wins_losses[0])
+    print(all_teams_5g_streak[0])
 
     
