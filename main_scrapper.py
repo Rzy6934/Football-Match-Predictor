@@ -9,14 +9,17 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.service import Service
 
 
 config = configparser.ConfigParser()
 
 CHROMEDRIVER_PATH = "C:\Program Files (x86)\chromedriver.exe"
-
-options = webdriver.ChromeOptions()
 service = ChromeService(executable_path=CHROMEDRIVER_PATH)
+service = Service()
+options = webdriver.ChromeOptions()
+options.add_argument("--headless=new")
+
 
 whoscored_url = "https://www.whoscored.com/"
 all_games_data = []
@@ -197,6 +200,21 @@ def select_season(driver, season):
                 select_season.select_by_value(option.get_attribute("value"))
                 break
 
+    except Exception as e:
+        print(f"Failed to select the season : {e}")
+        
+def select_stage(driver, championship):
+    try:
+        select_stage_element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "stages"))
+        )
+        select_stage = Select(select_stage_element)
+        
+        for option in select_stage.options:
+            if championship in option.text:
+                select_stage.select_by_value(option.get_attribute("value"))
+                break
+            
     except Exception as e:
         print(f"Failed to select the season : {e}")
 
@@ -449,13 +467,15 @@ if __name__ == "__main__":
         
         json_file_name = input("Json File Name : ")
 
-        driver = webdriver.Chrome(service=service, options=options)
+        # driver = webdriver.Chrome(service=service, options=options)
+        driver = webdriver.Chrome()
         driver.maximize_window()
         driver.get(whoscored_url)
         accept_cookies(driver)
         close_webpush_window(driver)
         select_championship(driver, championship_input)
         select_season(driver, season_input)
+        select_stage(driver, championship_input)
         select_fixtures(driver)
         select_date_config(driver)
         selectable_years = get_selectable_years(driver)

@@ -223,18 +223,18 @@ def add_agg_stats(all_games_data, all_teams_agg_goals_scored, all_teams_agg_goal
 
     return all_games_data
 
-# def add_full_time_results(all_games_data):
-#     for game_data in all_games_data:
-#         if game_data[5] > game_data[6]:
-#             game_data.insert(7, "H")
-#         else:
-#             game_data.insert(7, "NH")
+def add_full_time_results(all_games_data):
+    for game_data in all_games_data:
+        if game_data[5] > game_data[6]:
+            game_data.insert(7, "H")
+        else:
+            game_data.insert(7, "NH")
 
-# def add_matchday(all_games_data, nb_week_games):
-#     counter = 0
-#     for game_data in all_games_data:
-#         game_data.insert(1, (counter//nb_week_games)+1)
-#         counter += 1
+def add_matchday(all_games_data, nb_week_games):
+    counter = 0
+    for game_data in all_games_data:
+        game_data.insert(1, (counter//nb_week_games)+1)
+        counter += 1
 
 
 if __name__ == "__main__":
@@ -254,7 +254,7 @@ if __name__ == "__main__":
 
     # season_formatted = transform_season_format(season_input)
     
-    championship_input = "LaLiga"
+    championship_input = "Serie A"
     season_input = "2022-2023"
     season_formatted = transform_season_format(season_input)
 
@@ -263,21 +263,13 @@ if __name__ == "__main__":
     with open(json_data_path, "r") as json_file:
         all_games_data = json.load(json_file)
 
-    # add_full_time_results(all_games_data)
-
     if championship_input == "Bundesliga":
         nb_week_games = 9
     else:
         nb_week_games = 10
 
-    # print(nb_week_games)
-
-    # add_matchday(all_games_data, nb_week_games)
-
     get_teams(all_games_data, nb_week_games)
-    
-    print(teams)
-
+        
     all_teams_wins_losses = get_win_losses(all_games_data)
 
     all_teams_5g_streaks = get_5g_streaks(all_teams_wins_losses)
@@ -285,15 +277,17 @@ if __name__ == "__main__":
     all_teams_5_wins_streaks, all_teams_5_losses_streaks = get_5_wins_losses_streaks(all_teams_5g_streaks)
     
     all_teams_3_wins_streaks, all_teams_3_losses_streaks = get_3_wins_losses_streaks(all_teams_5g_streaks)
-
+    
     all_teams_agg_goals_scored, all_teams_agg_goals_conceded = get_agg_goals(all_games_data)
     
     all_teams_agg_points = get_agg_points(all_games_data)
 
     all_games_data_updated = add_default_stats(all_games_data)
 
-    all_games_data_updated_2 = add_agg_stats(all_games_data_updated, all_teams_agg_goals_scored, all_teams_agg_goals_conceded, all_teams_agg_points, all_teams_5g_streaks, all_teams_5_wins_streaks, all_teams_5_losses_streaks, all_teams_3_wins_streaks, all_teams_3_losses_streaks, teams)
+    all_games_data_updated_final = add_agg_stats(all_games_data_updated, all_teams_agg_goals_scored, all_teams_agg_goals_conceded, all_teams_agg_points, all_teams_5g_streaks, all_teams_5_wins_streaks, all_teams_5_losses_streaks, all_teams_3_wins_streaks, all_teams_3_losses_streaks, teams)
 
-    for data in all_games_data_updated_2[296:]:
-        print("--------------------------------")
-        print(data)
+    add_full_time_results(all_games_data_updated_final)
+    
+    add_matchday(all_games_data_updated_final, nb_week_games)
+    
+    print(all_games_data_updated_final)
