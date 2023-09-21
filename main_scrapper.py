@@ -7,9 +7,19 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.service import Service
 
 
 config = configparser.ConfigParser()
+
+CHROMEDRIVER_PATH = "C:\Program Files (x86)\chromedriver.exe"
+service = ChromeService(executable_path=CHROMEDRIVER_PATH)
+service = Service()
+options = webdriver.ChromeOptions()
+options.add_argument("--headless=new")
+
 
 whoscored_url = "https://www.whoscored.com/"
 all_games_data = []
@@ -192,6 +202,21 @@ def select_season(driver, season):
 
     except Exception as e:
         print(f"Failed to select the season : {e}")
+        
+def select_stage(driver, championship):
+    try:
+        select_stage_element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "stages"))
+        )
+        select_stage = Select(select_stage_element)
+        
+        for option in select_stage.options:
+            if championship in option.text:
+                select_stage.select_by_value(option.get_attribute("value"))
+                break
+            
+    except Exception as e:
+        print(f"Failed to select the season : {e}")
 
 def select_fixtures(driver):
     try:
@@ -285,6 +310,7 @@ def get_team_names(driver):
         )
 
         home_team, away_team = team_names[0].text, team_names[1].text
+        # print(home_team, away_team)
 
     except Exception as e:
         print(f"Failed to get the teams names : {e}")
@@ -309,17 +335,28 @@ def get_game_date(driver):
 
 def get_goals(driver):
     try:
-        half_time_score_element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//dt[text()="Half time:"]/following-sibling::dd[1]'))
-        )
+        try:
+            half_time_score_element = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//dt[text()="Half time:"]/following-sibling::dd[1]'))
+            )
+            home_team_half_time_goals, away_team_half_time_goals = half_time_score_element.text.split(":")
+
+        except NoSuchElementException:
+            home_team_half_time_goals = away_team_half_time_goals = "ND"
+        
         full_time_score_element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, '//dt[text()="Full time:"]/following-sibling::dd[1]'))
         )
-
-        home_team_half_time_goals, away_team_half_time_goals = half_time_score_element.text.split(":")
         home_team_full_time_goals, away_team_full_time_goals = full_time_score_element.text.split(":")
 
-        game_goals = [int(home_team_half_time_goals), int(away_team_half_time_goals), int(home_team_full_time_goals), int(away_team_full_time_goals)]
+        # print(half_time_score_element.text.split(":"))
+        # print(full_time_score_element.text.split(":"))
+        
+        if home_team_half_time_goals == away_team_half_time_goals == "ND":
+            game_goals = [home_team_half_time_goals, away_team_half_time_goals, int(home_team_full_time_goals), int(away_team_full_time_goals)]
+
+        else:
+            game_goals = [int(home_team_half_time_goals), int(away_team_half_time_goals), int(home_team_full_time_goals), int(away_team_full_time_goals)]
 
     except Exception as e:
         print(f"Failed to get game goals : {e}")
@@ -430,6 +467,7 @@ if __name__ == "__main__":
         
         json_file_name = input("Json File Name : ")
 
+        # driver = webdriver.Chrome(service=service, options=options)
         driver = webdriver.Chrome()
         driver.maximize_window()
         driver.get(whoscored_url)
@@ -437,6 +475,7 @@ if __name__ == "__main__":
         close_webpush_window(driver)
         select_championship(driver, championship_input)
         select_season(driver, season_input)
+        select_stage(driver, championship_input)
         select_fixtures(driver)
         select_date_config(driver)
         selectable_years = get_selectable_years(driver)
