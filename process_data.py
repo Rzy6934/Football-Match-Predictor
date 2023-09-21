@@ -12,9 +12,8 @@ def transform_season_format(season):
 
 def get_teams(all_games_data, nb_week_games):
     teams = []
-    for game_data in all_games_data[0:nb_week_games]:
-        teams.append(game_data[1])
-        teams.append(game_data[2])
+    for game_data in all_games_data[:nb_week_games]:
+        teams.extend(game_data[1:3])
         
     return teams
 
@@ -286,7 +285,7 @@ if __name__ == "__main__":
     add_full_time_results(all_games_data_updated_final)
     
     add_matchday(all_games_data_updated_final, nb_week_games)
-    
+        
     json_data = json.dumps(all_games_data_updated_final)
     
     with open(f"data/{championship_input}/{season_input}/{season_formatted}_final_data.json", "w") as json_file:
