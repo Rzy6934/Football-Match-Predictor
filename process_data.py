@@ -3,26 +3,31 @@ import json
 championships = ["Bundesliga", "LaLiga", "Ligue 1", "Premier League", "Serie A"]
 seasons = ["2021-2022", "2022-2023"]
 nb_week_games = 0
-teams = []
 counter = 0
+stats = ["HTAGS", "ATAGS", "HTAGC", "ATAGC", "HTAP", "ATAP", "HTGD", "ATGD", "HTFGS", "ATFGS", "HTFWS", "ATFWS", "HTFLS", "ATFLS", "HTTWS", "ATTWS", "HTTLS", "ATTLS"]
 
 def transform_season_format(season):
     parts = season.split("-")
     return f"{parts[0]}_{parts[1]}"
 
 def get_teams(all_games_data, nb_week_games):
+    teams = []
     for game_data in all_games_data[0:nb_week_games]:
         teams.append(game_data[1])
         teams.append(game_data[2])
+        
+    return teams
 
-def add_default_stats(all_games_data):
-    zeros_list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+def add_default_stats(all_games_data, stats):
+    zeros_list = []
+    for _ in stats:
+        zeros_list.append(0)
     for game_data in all_games_data:
         game_data += zeros_list
 
     return all_games_data
 
-def get_agg_goals(all_games_data):
+def get_agg_goals(all_games_data, teams):
     all_teams_agg_goals_scored = []
     all_teams_agg_goals_conceded = []
     team_agg_goals_scored = []
@@ -53,11 +58,9 @@ def get_agg_goals(all_games_data):
 
     return all_teams_agg_goals_scored, all_teams_agg_goals_conceded
 
-def get_agg_points(all_games_data):
+def get_agg_points(all_games_data, teams):
     all_teams_agg_points = []
-    all_teams_wins_losses = []
     team_agg_points = []
-    team_wins_losses = []
     agg_points = 0
 
     for team in teams:
@@ -65,26 +68,20 @@ def get_agg_points(all_games_data):
             if team in game_data[1]:
                 if game_data[5] > game_data[6]:
                     agg_points += 3
-                    team_wins_losses.append("W")
                 elif game_data[5] == game_data[6]:
                     agg_points += 1
-                    team_wins_losses.append("D")
                 else:
                     agg_points += 0
-                    team_wins_losses.append("L")
 
                 team_agg_points.append(agg_points)
 
             elif team in game_data[2]:
                 if game_data[6] > game_data[5]:
                     agg_points += 3
-                    team_wins_losses.append("W")
                 elif game_data[6] == game_data[5]:
                     agg_points += 1
-                    team_wins_losses.append("D")
                 else:
                     agg_points += 0
-                    team_wins_losses.append("L")
 
                 team_agg_points.append(agg_points)
         team_agg_points.insert(0, 0)
@@ -94,7 +91,7 @@ def get_agg_points(all_games_data):
 
     return all_teams_agg_points
 
-def get_win_losses(all_games_data):
+def get_win_losses(all_games_data, teams):
     all_teams_wins_losses = []
     team_wins_losses = []
 
@@ -254,8 +251,8 @@ if __name__ == "__main__":
 
     # season_formatted = transform_season_format(season_input)
     
-    championship_input = "Serie A"
-    season_input = "2022-2023"
+    championship_input = "Premier League"
+    season_input = "2021-2022"
     season_formatted = transform_season_format(season_input)
 
     json_data_path = f"data/{championship_input}/{season_input}/{season_formatted}_data.json"
@@ -263,14 +260,14 @@ if __name__ == "__main__":
     with open(json_data_path, "r") as json_file:
         all_games_data = json.load(json_file)
 
-    if championship_input == "Bundesliga":
+    if championship_input == "Bundesliga" or (championship_input == "Ligue 1" and season_input == "2023-2024"):
         nb_week_games = 9
     else:
         nb_week_games = 10
 
-    get_teams(all_games_data, nb_week_games)
+    teams = get_teams(all_games_data, nb_week_games)
         
-    all_teams_wins_losses = get_win_losses(all_games_data)
+    all_teams_wins_losses = get_win_losses(all_games_data, teams)
 
     all_teams_5g_streaks = get_5g_streaks(all_teams_wins_losses)
     
@@ -278,11 +275,11 @@ if __name__ == "__main__":
     
     all_teams_3_wins_streaks, all_teams_3_losses_streaks = get_3_wins_losses_streaks(all_teams_5g_streaks)
     
-    all_teams_agg_goals_scored, all_teams_agg_goals_conceded = get_agg_goals(all_games_data)
+    all_teams_agg_goals_scored, all_teams_agg_goals_conceded = get_agg_goals(all_games_data, teams)
     
-    all_teams_agg_points = get_agg_points(all_games_data)
+    all_teams_agg_points = get_agg_points(all_games_data, teams)
 
-    all_games_data_updated = add_default_stats(all_games_data)
+    all_games_data_updated = add_default_stats(all_games_data, stats)
 
     all_games_data_updated_final = add_agg_stats(all_games_data_updated, all_teams_agg_goals_scored, all_teams_agg_goals_conceded, all_teams_agg_points, all_teams_5g_streaks, all_teams_5_wins_streaks, all_teams_5_losses_streaks, all_teams_3_wins_streaks, all_teams_3_losses_streaks, teams)
 
@@ -290,4 +287,7 @@ if __name__ == "__main__":
     
     add_matchday(all_games_data_updated_final, nb_week_games)
     
-    print(all_games_data_updated_final)
+    json_data = json.dumps(all_games_data_updated_final)
+    
+    with open(f"data/{championship_input}/{season_input}/{season_formatted}_final_data.json", "w") as json_file:
+            json_file.write(json_data)
