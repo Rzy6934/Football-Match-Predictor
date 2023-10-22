@@ -2,6 +2,7 @@ import json
 
 championships = ["Bundesliga", "LaLiga", "Ligue 1", "Premier League", "Serie A"]
 seasons = ["2021-2022", "2022-2023"]
+columns = ["Date", "Matchweek", "HomeTeam", "AwayTeam", "Hpossession", "Apossession", "HcornersTotal", "AcornersTotal", "HshotsTotal", "AshotsTotal", "HshotsOnTarget", "AshotsOnTarget", "HshotsOffTarget", "AshotsOffTarget", "HshotsBlocked", "AshotsBlocked", ""] 
 
 def transform_season_format(season):
     parts = season.split("-")
@@ -20,6 +21,10 @@ def get_all_data(championships, seasons):
                 game_data = []
                 
     return all_games_data
+
+# def dataframe_converter(all_games_data):
+    
+    
 
 if __name__ == "__main__":
     all_games_data = get_all_data(championships, seasons)
