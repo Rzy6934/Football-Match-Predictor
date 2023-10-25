@@ -2,7 +2,7 @@ import json
 
 championships = ["Bundesliga", "LaLiga", "Ligue 1", "Premier League", "Serie A"]
 seasons = ["2021-2022", "2022-2023"]
-columns = ["Date", "Matchweek", "HomeTeam", "AwayTeam", "Hpossession", "Apossession", "HcornersTotal", "AcornersTotal", "HshotsTotal", "AshotsTotal", "HshotsOnTarget", "AshotsOnTarget", "HshotsOffTarget", "AshotsOffTarget", "HshotsBlocked", "AshotsBlocked", ""] 
+columns = ["Date", "Matchweek", "HomeTeam", "AwayTeam", "Hpossession", "Apossession", "HcornersTotal", "AcornersTotal", "HshotsTotal", "AshotsTotal", "HshotsOnTarget", "AshotsOnTarget", "HshotsOffTarget", "AshotsOffTarget", "HshotsBlocked", "AshotsBlocked", "HpassesTotal", "ApassesTotal", "HpassSuccess", "ApassSuccess", "HpassesKey", "ApassesKey", "HdribblesAttempted", "AdribblesAttempted", "HdribblesWon", "AdribblesWon", "HdribbleSuccess", "AdribbleSuccess", "HaerialsWon", "AaerialsWon", "HaerialSuccess", "AaerialSuccess", "HdefensiveAerials", "AdefensiveAerials", "HoffensiveAerials", "AoffensiveAerials", "HtacklesTotal", "AtacklesTotal", "HtackleSuccessful", "AtackleSuccessful", "HtackleSuccess", "AtackleSuccess", "Hinterceptions", "Ainterceptions", "HfoulsCommited", "AfoulsCommited", "HoffsidesCaught", "AoffsidesCaught", "HaggregateGoalsScored", "AaggregateGoalsScored", "HaggregateGoalsConceded", "AaggregateGoalsConceded", "HaggregatePoints", "AaggregatePoints", "HgoalsDifference", "AgoalsDifference", "HlastFiveGamesStreak", "AlastFiveGamesStreak", "HfiveWinsStreaks", "AfiveWinsStreaks", "HfiveLossesStreaks", "AfiveLossesStreaks", "HthreeWinsStreaks", "AthreeWinsStreaks", "HthreeLossesStreaks", "AthreeLossesStreaks"] 
 
 def transform_season_format(season):
     parts = season.split("-")
