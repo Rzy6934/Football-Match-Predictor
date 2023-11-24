@@ -2,18 +2,30 @@ import json
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import re
 
 championships = ["Bundesliga", "LaLiga", "Ligue 1", "Premier League", "Serie A"]
 seasons = ["2021-2022", "2022-2023"]
-columns = ["Date", "Matchweek", "HomeTeam", "AwayTeam", "HhalfTimeGoals", "AhalfTimeGoals", "HfullTimeGoals", "AfullTimeGoals", "FullTimeResult", 
-           "Hpossession", "Apossession", "HcornersTotal", "AcornersTotal", "HshotsTotal", "AshotsTotal", "HshotsOnTarget", "AshotsOnTarget", 
-           "HshotsOffTarget", "AshotsOffTarget", "HshotsBlocked", "AshotsBlocked", "HpassesTotal", "ApassesTotal", "HpassSuccess", "ApassSuccess", 
-           "HpassesKey", "ApassesKey", "HdribblesAttempted", "AdribblesAttempted", "HdribblesWon", "AdribblesWon", "HdribbleSuccess", "AdribbleSuccess", 
-           "HaerialsWon", "AaerialsWon", "HaerialSuccess", "AaerialSuccess", "HdefensiveAerials", "AdefensiveAerials", "HoffensiveAerials", "AoffensiveAerials", 
-           "HtacklesTotal", "AtacklesTotal", "HtackleSuccessful", "AtackleSuccessful", "HtackleSuccess", "AtackleSuccess", "Hinterceptions", "Ainterceptions", 
-           "HfoulsCommited", "AfoulsCommited", "HoffsidesCaught", "AoffsidesCaught", "HaggregateGoalsScored", "AaggregateGoalsScored", "HaggregateGoalsConceded", 
-           "AaggregateGoalsConceded", "HaggregatePoints", "AaggregatePoints", "HgoalsDifference", "AgoalsDifference", "HlastFiveGamesStreak", "AlastFiveGamesStreak", 
-           "HfiveWinsStreaks", "AfiveWinsStreaks", "HfiveLossesStreaks", "AfiveLossesStreaks", "HthreeWinsStreaks", "AthreeWinsStreaks", "HthreeLossesStreaks", "AthreeLossesStreaks"] 
+# columns = ["Date", "Matchweek", "HomeTeam", "AwayTeam", "HhalfTimeGoals", "AhalfTimeGoals", "HfullTimeGoals", "AfullTimeGoals", "FullTimeResult", 
+#            "Hpossession", "Apossession", "HcornersTotal", "AcornersTotal", "HshotsTotal", "AshotsTotal", "HshotsOnTarget", "AshotsOnTarget", 
+#            "HshotsOffTarget", "AshotsOffTarget", "HshotsBlocked", "AshotsBlocked", "HpassesTotal", "ApassesTotal", "HpassSuccess", "ApassSuccess", 
+#            "HpassesKey", "ApassesKey", "HdribblesAttempted", "AdribblesAttempted", "HdribblesWon", "AdribblesWon", "HdribbleSuccess", "AdribbleSuccess", 
+#            "HaerialsWon", "AaerialsWon", "HaerialSuccess", "AaerialSuccess", "HdefensiveAerials", "AdefensiveAerials", "HoffensiveAerials", "AoffensiveAerials", 
+#            "HtacklesTotal", "AtacklesTotal", "HtackleSuccessful", "AtackleSuccessful", "HtackleSuccess", "AtackleSuccess", "Hinterceptions", "Ainterceptions", 
+#            "HfoulsCommited", "AfoulsCommited", "HoffsidesCaught", "AoffsidesCaught", "HaggregateGoalsScored", "AaggregateGoalsScored", "HaggregateGoalsConceded", 
+#            "AaggregateGoalsConceded", "HaggregatePoints", "AaggregatePoints", "HgoalsDifference", "AgoalsDifference", "HlastFiveGamesStreak", "AlastFiveGamesStreak", 
+#            "HfiveWinsStreaks", "AfiveWinsStreaks", "HfiveLossesStreaks", "AfiveLossesStreaks", "HthreeWinsStreaks", "AthreeWinsStreaks", "HthreeLossesStreaks", "AthreeLossesStreaks"]
+
+
+def import_stats(filename):
+  columns = []
+  with open(filename, 'r') as file:
+      for line in file:
+          column_name = re.search(r'(\w+)\s*\(.*\)', line)
+          if column_name:
+              columns.append(column_name.group(1))
+
+  return columns
 
 def transform_season_format(season):
     parts = season.split("-")
@@ -39,11 +51,19 @@ def dataframe_converter(dataset, columns):
     return all_games_df
 
 
-def correlation_matrix(dataset):
+def generate_correlation_matrix(dataset):
+    threshold = 0.8
     dataset_2 = dataset.copy().drop(columns=["Date", "Matchweek", "HomeTeam", "AwayTeam", "FullTimeResult", "HlastFiveGamesStreak", "AlastFiveGamesStreak"])
-    plt.figure()
-    sns.heatmap(dataset_2.corr(), annot= True)
-    plt.show()
+    correlation_matrix = dataset_2.corr()
+    
+    for row in correlation_matrix.index:
+        for col in correlation_matrix.columns:
+            corr_value = correlation_matrix.loc[row, col]
+            if corr_value > threshold and row != col:
+                print(f"Correlation between '{row}' and '{col}': {corr_value}")
+    # plt.figure()
+    # sns.heatmap(dataset_2.corr(), annot= True)
+    # plt.show()
     
 
 def compute_win_rate(dataset):
@@ -62,10 +82,11 @@ def compute_win_rate(dataset):
     
 
 if __name__ == "__main__":
+    columns = import_stats("stats_list.txt")
     all_games_data = get_all_data(championships, seasons)
     all_games_df = dataframe_converter(all_games_data, columns)
     print(all_games_df.head())
-    correlation_matrix(all_games_df)
+    generate_correlation_matrix(all_games_df)
     compute_win_rate(all_games_df)
     # print(len(all_games_data[0]))
     # print(len(columns))
