@@ -1,6 +1,5 @@
 import time
 import json
-import configparser
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -11,9 +10,6 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.service import Service
 
-
-config = configparser.ConfigParser()
-
 CHROMEDRIVER_PATH = "C:\Program Files (x86)\chromedriver.exe"
 service = ChromeService(executable_path=CHROMEDRIVER_PATH)
 service = Service()
@@ -23,13 +19,8 @@ options.add_argument("--headless=new")
 
 whoscored_url = "https://www.whoscored.com/"
 all_games_data = []
-config_championships_dico = {
-    "Premier League": "config_EN.ini", 
-    "LaLiga": "config_ES.ini", 
-    "Serie A": "config_IT.ini", 
-    "Bundesliga": "config_DE.ini", 
-    "Ligue 1": "config_FR.ini"
-}
+championships_list = ["Ligue 1", "Bundesliga", "Serie A", "Premier League", "LaLiga"]
+
 xpath_stats_elements = {
     "not_clickable_elements":{
         "possession": {
@@ -180,6 +171,11 @@ def scroll_to_stats(driver):
 
 def select_championship(driver, championship):
     try:
+        top_tournaments_button = WebDriverWait(driver,10).until(
+          EC.element_to_be_clickable((By.ID, "Top-Tournaments-btn"))
+        )
+        top_tournaments_button.click()
+        
         championship_link = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, championship))
         )
@@ -432,13 +428,12 @@ if __name__ == "__main__":
     try:
         while True:
             championship_input = input("Championship : ")
-            if championship_input in list(config_championships_dico.keys()):
+            if championship_input in championships_list:
                 break
             else:
                 print("Invalid championship. Please enter a valid championship.")
         
-        config.read(f"configs/{config_championships_dico[championship_input]}")
-        season_input = config["Parameters"]["Season"]
+        season_input = input("Season (Follow format YYYY/YYYY) : ")
         season_formatted = transform_season_format(season_input)
         
         valid_years = season_input.split("/")
@@ -508,8 +503,8 @@ if __name__ == "__main__":
 
                 month_games = []
 
-        with open(f"configs/{config_championships_dico[championship_input]}", 'w') as configfile:
-            config.write(configfile)
+        # with open(f"configs/{config_championships_dico[championship_input]}", 'w') as configfile:
+        #     config.write(configfile)
 
         json_data = json.dumps(all_games_data)
 
